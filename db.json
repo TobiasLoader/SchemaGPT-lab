@@ -1,0 +1,63 @@
+{
+   "author":"Tobias Loader",
+   "schema":{
+      "id":0,
+      "name":"",
+      "species":"",
+      "diet":"",
+      "habitat":"",
+      "characteristics":[
+        ""
+      ]
+   },
+   "data":{
+      "Tiger":{
+         "id":0,
+         "name":"Tiger",
+         "species":"Panthera tigris",
+         "diet":"Carnivore",
+         "habitat":"Jungle",
+         "characteristics":[
+            "Striped fur",
+            "Solitary",
+            "Strong"
+         ]
+      },
+      "Elephant":{
+         "id":1,
+         "name":"Elephant",
+         "species":"Loxodonta africana",
+         "diet":"Herbivore",
+         "habitat":"Jungle",
+         "characteristics":[
+            "Large ears",
+            "Trunk",
+            "Tusks"
+         ]
+      },
+      "Parrot":{
+         "id":2,
+         "name":"Parrot",
+         "species":"Psittaciformes",
+         "diet":"Omnivore",
+         "habitat":"Jungle",
+         "characteristics":[
+            "Colorful feathers",
+            "Beak",
+            "Mimicry ability"
+         ]
+      },
+      "Chimpanzee":{
+         "id":3,
+         "name":"Chimpanzee",
+         "species":"Pan troglodytes",
+         "diet":"Omnivore",
+         "habitat":"Jungle",
+         "characteristics":[
+            "Knuckle-walking",
+            "Use of tools",
+            "Complex social structures"
+         ]
+      }
+   }
+}
