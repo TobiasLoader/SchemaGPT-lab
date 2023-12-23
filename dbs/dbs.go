@@ -52,3 +52,25 @@ func MaybeReadDB(fileName string) MaybeAnimalData {
     
     return MaybeAnimalData{Success:true,DB:local_db}
 }
+
+func WriteDB(fileName string, data AnimalData) bool {
+    file, errOpen := os.Create(fileName)
+    if errOpen != nil {
+        utils.Error("Error could not open file. Error: " + errOpen.Error());
+        return false;
+    } else {
+        jsonData, errMarshal := json.MarshalIndent(data, "", "    ");
+        if errMarshal != nil {
+            utils.Error("Error could not marshal data. Error: " + errMarshal.Error());
+            return false;
+        } else {
+            _, errWrite := file.Write(jsonData)
+            if errWrite != nil {
+                utils.Error("Error occurred during writing to the file. Error: " + errWrite.Error());
+                return false;
+            }
+        }
+        defer file.Close()
+    }
+    return true;
+}

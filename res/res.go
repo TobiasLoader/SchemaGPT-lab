@@ -8,28 +8,37 @@ import (
     "encoding/json"
 )
 
+type ResData interface {};
+
 type Response struct {
     Success bool
     Error string
     Data json.RawMessage
 }
 
+func ErrorResponse(err string) Response {
+    return Response{Success:false,Error:err};
+}
+
+func SuccessResponse() Response {
+    return Response{Success:true};
+}
+
 type SuccessDBType func(dbs.AnimalData) Response
 type FailureDBType func(string) Response
-
 
 func DefaultFailure(fileName string) Response {
     err := "could not read database '"+fileName+"'";
     utils.Error(err);
-    return Response{Success:false,Error:err};
+    return ErrorResponse(err);
 }
 
-func ConstructResponse(db dbs.AnimalData) Response {
-    data, err := json.Marshal(db)
+func ConstructResponse(resData ResData) Response {
+    data, err := json.Marshal(resData)
     if err != nil {
         errStr := err.Error();
         utils.Error(errStr);
-        return Response{Success:false,Error:errStr};
+        return ErrorResponse(errStr);
     }
     return Response{Success:true,Data:data};
 }
