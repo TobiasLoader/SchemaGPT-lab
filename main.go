@@ -60,6 +60,28 @@ func getDB(w http.ResponseWriter, r *http.Request) {
     res.SendResponse(obj, w, r);
 }
 
+func getAnimal(w http.ResponseWriter, r *http.Request) {
+    queryParams := r.URL.Query()
+    animals, exists := queryParams["animal"]
+    // fmt.Println(queryParams)
+    if !exists || len(animals) == 0 {
+        res.SendResponse(res.ErrorResponse("No 'animal' query parameter supplied"), w, r);
+        return
+    }
+    animal := animals[0]
+    obj := db("db.json",func (db dbs.AnimalData) res.Response {
+        animalData, exists := db.Data[animal]
+        if exists {
+            return res.ConstructResponse(animalData);
+        } else {
+            return res.ErrorResponse("Animal provided does not exist in database.");
+        }
+    }, res.DefaultFailure);
+    
+    res.SendResponse(obj, w, r);
+}
+
+
 // POST api endpoints
 
 type PostAuthor struct{
@@ -106,6 +128,7 @@ func main() {
     })
     
     GET("/getDB", getDB);
+    GET("/getAnimal", getAnimal);
     POST("/setAuthor", postAuthor);
 
     fmt.Println("Listen on http://localhost:8080");
