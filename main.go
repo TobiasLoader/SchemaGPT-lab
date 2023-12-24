@@ -54,7 +54,6 @@ func db(fileName string, success res.SuccessDBType, failure res.FailureDBType) r
 
 func getDB(w http.ResponseWriter, r *http.Request) {
     obj := db("db.json",func (db dbs.AnimalData) res.Response {
-        fmt.Println(db);
         return res.ConstructResponse(db);
     }, res.DefaultFailure);
     
@@ -67,8 +66,12 @@ type PostAuthor struct{
     Author string
 }
 
+func (body *PostAuthor) Valid() bool {
+    return body.Author != ""
+}
+
 func postAuthor(body []byte, w http.ResponseWriter, r *http.Request) {
-    bodyReq := req.DeconstructBody(body, &PostAuthor{});
+    bodyReq := req.UnmarshalBody(body, &PostAuthor{});
     if bodyReq.Success {
         if typeCheckedPostBody, ok := bodyReq.Body.(*PostAuthor); ok {
             postAuthorReq(typeCheckedPostBody, w, r);
@@ -85,19 +88,21 @@ func postAuthorReq(body *PostAuthor, w http.ResponseWriter, r *http.Request) {
         db.Author = body.Author;
         written := dbs.WriteDB("db.json",db);
         if written {
-            return res.ConstructResponse(db);
+            return res.SuccessResponse();
         } else {
-            return res.ErrorResponse("oops");
+            return res.ErrorResponse("Author not written to database.");
         }
     }, res.DefaultFailure);
     
     res.SendResponse(obj, w, r);
-    // res.SendResponse(res.ConstructResponse(body), w, r);
 }
+
+// main
 
 func main() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
+        errRes := res.ErrorResponse("Nothing at '"+r.URL.Path+"' instead go to '/getDB'");
+        res.SendResponse(errRes, w, r);
     })
     
     GET("/getDB", getDB);

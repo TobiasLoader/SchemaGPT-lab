@@ -2,11 +2,12 @@ package req
 
 import (
     "SchemaGPT-lab/utils"
-    "fmt"
     "encoding/json"
 )
 
-type PostBody interface {};
+type PostBody interface {
+    Valid() bool
+};
 
 type Request struct {
     Success bool
@@ -14,15 +15,18 @@ type Request struct {
     Body PostBody
 }
 
-func DeconstructBody(body []byte, data PostBody) Request {
+func UnmarshalBody(body []byte, data PostBody) Request {
     err := json.Unmarshal(body,data);
     if err != nil {
         errStr := err.Error();
         utils.Error(errStr);
         return Request{Success:false, Error:errStr};
     } else {
-        fmt.Println("data",data);
-        return Request{Success:true, Body:data};
+        if data.Valid() {
+            return Request{Success:true, Body:data};
+        } else {
+            return Request{Success:false, Error:"POST body doesn't have all required fields."};
+        }
     }
 }
 

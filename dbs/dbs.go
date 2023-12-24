@@ -8,11 +8,10 @@ import (
 
 type AnimalData struct {
     Author string            `json:"author"`
-    Schema Schema            `json:"schema"`
     Data   map[string]Animal `json:"data"`
 }
 
-type Schema struct {
+type Animal struct {
     ID             int `json:"id"`
     Name           string `json:"name"`
     Species        string `json:"species"`
@@ -21,9 +20,6 @@ type Schema struct {
     Characteristics []string `json:"characteristics"`
 }
 
-type Animal struct {
-    Schema
-}
 
 type MaybeAnimalData struct {
     Success bool

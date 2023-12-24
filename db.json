@@ -1,15 +1,5 @@
 {
-    "author": "Toby",
-    "schema": {
-        "id": 0,
-        "name": "",
-        "species": "",
-        "diet": "",
-        "habitat": "",
-        "characteristics": [
-            ""
-        ]
-    },
+    "author": "Tobli",
     "data": {
         "Chimpanzee": {
             "id": 3,
