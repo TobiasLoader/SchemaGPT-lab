@@ -84,6 +84,8 @@ func getAnimal(w http.ResponseWriter, r *http.Request) {
 
 // POST api endpoints
 
+//// POST AUTHOR
+
 type PostAuthor struct{
     Author string
 }
@@ -119,6 +121,51 @@ func postAuthorReq(body *PostAuthor, w http.ResponseWriter, r *http.Request) {
     res.SendResponse(obj, w, r);
 }
 
+
+/// POST ANIMAL CHARACTERISTIC
+
+type PostAnimalCharacteristic struct{
+    Animal string
+    Characteristic string
+}
+
+func (body *PostAnimalCharacteristic) Valid() bool {
+    return body.Animal != "" && body.Characteristic != ""
+}
+
+func postAnimalCharacteristic(body []byte, w http.ResponseWriter, r *http.Request) {
+    bodyReq := req.UnmarshalBody(body, &PostAnimalCharacteristic{});
+    if bodyReq.Success {
+        if typeCheckedPostBody, ok := bodyReq.Body.(*PostAnimalCharacteristic); ok {
+            postAnimalCharacteristicReq(typeCheckedPostBody, w, r);
+        } else {
+            res.SendResponse(res.ErrorResponse("Incorrect type"), w, r);
+        }
+    } else {
+        res.SendResponse(res.ErrorResponse(bodyReq.Error), w, r);
+    }
+}
+
+func postAnimalCharacteristicReq(body *PostAnimalCharacteristic, w http.ResponseWriter, r *http.Request) {
+    obj := db("db.json",func (db dbs.AnimalData) res.Response {
+        animalData, exists := db.Data[body.Animal]
+        if exists {
+            animalData.Characteristics = append(animalData.Characteristics,body.Characteristic);
+            db.Data[body.Animal] = animalData;
+            written := dbs.WriteDB("db.json",db);
+            if written {
+                return res.SuccessResponse();
+            } else {
+                return res.ErrorResponse("Characteristic not written to database.");
+            }
+        } else {
+            return res.ErrorResponse("Animal provided does not exist in database.");
+        }
+    }, res.DefaultFailure);
+    
+    res.SendResponse(obj, w, r);
+}
+
 // main
 
 func main() {
@@ -129,7 +176,8 @@ func main() {
     
     GET("/getDB", getDB);
     GET("/getAnimal", getAnimal);
-    POST("/setAuthor", postAuthor);
+    POST("/postAuthor", postAuthor);
+    POST("/postAnimalCharacteristic", postAnimalCharacteristic);
 
     fmt.Println("Listen on http://localhost:8080");
     http.ListenAndServe("localhost:8080", nil);
