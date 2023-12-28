@@ -7,6 +7,8 @@ import (
     "fmt"
     "io/ioutil"
     "net/http"
+    "os"
+    "github.com/joho/godotenv"
 )
 
 // GET & POST
@@ -166,6 +168,32 @@ func postAnimalCharacteristicReq(body *PostAnimalCharacteristic, w http.Response
     res.SendResponse(obj, w, r);
 }
 
+// deploy
+
+func deploy(){
+    godotenv.Load() // This will load the .env file
+    
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+    
+    deployEnv, exists := os.LookupEnv("DEPLOY_ENV");
+    if exists {
+        if deployEnv == "local" {
+            fmt.Println("Listen on http://localhost:"+port);
+            http.ListenAndServe("localhost:"+port, nil);
+        } else if deployEnv == "prod" {
+            fmt.Println("Listen on port "+port);
+            http.ListenAndServe(":"+port, nil);
+        } else {
+            fmt.Println("Unrecognised deploy environment '"+deployEnv+"'");
+        }
+    } else {
+        fmt.Println("Could't find environment variable 'DEPLOY_ENV'");
+    }
+}
+
 // main
 
 func main() {
@@ -179,6 +207,5 @@ func main() {
     POST("/postAuthor", postAuthor);
     POST("/postAnimalCharacteristic", postAnimalCharacteristic);
 
-    fmt.Println("Listen on http://localhost:8080");
-    http.ListenAndServe("localhost:8080", nil);
+    deploy();
 }
