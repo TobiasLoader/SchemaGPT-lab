@@ -233,6 +233,17 @@ func schema(w http.ResponseWriter, r *http.Request) {
     }    
 }
 
+// OPEN AI PRIVACY
+
+func privacy(w http.ResponseWriter, r *http.Request) {
+    data, err := ioutil.ReadFile("privacy.md")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    w.Header().Set("Content-Type", "text/markdown")
+    w.Write(data)
+}
 
 // main
 
@@ -242,13 +253,16 @@ func main() {
         res.SendResponse(errRes, w, r);
     })
     
+    // animal endpoints
     GET("/getDB", getDB);
     GET("/getAnimal", getAnimal);
     POST("/postAuthor", postAuthor);
     POST("/postAnimalCharacteristic", postAnimalCharacteristic);
     POST("/postNewAnimal", postNewAnimal);
 
+    // openai endpoints
     GET("/schema", schema);
+    GET("/privacy", privacy);
 
     deploy();
 }
