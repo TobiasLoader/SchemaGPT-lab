@@ -1,8 +1,8 @@
 {
-    "author": "Daisy",
+    "author": "Toby",
     "data": {
         "Chimpanzee": {
-            "id": 3,
+            "population": 120000,
             "name": "Chimpanzee",
             "species": "Pan troglodytes",
             "diet": "Omnivore",
@@ -14,7 +14,7 @@
             ]
         },
         "Elephant": {
-            "id": 1,
+            "population": 515000,
             "name": "Elephant",
             "species": "Loxodonta africana",
             "diet": "Herbivore",
@@ -26,7 +26,7 @@
             ]
         },
         "Parrot": {
-            "id": 2,
+            "population": 70000000,
             "name": "Parrot",
             "species": "Psittaciformes",
             "diet": "Omnivore",
@@ -38,7 +38,7 @@
             ]
         },
         "Tiger": {
-            "id": 0,
+            "population": 5574,
             "name": "Tiger",
             "species": "Panthera tigris",
             "diet": "Carnivore",
@@ -50,6 +50,14 @@
                 "awesome",
                 "aawesome"
             ]
+        },
+        "Velociraptor": {
+            "population": 0,
+            "name": "Velociraptor",
+            "species": "V. mongoliensis",
+            "diet": "Carnivorous",
+            "habitat": "desert",
+            "characteristics": []
         }
     }
 }

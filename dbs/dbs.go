@@ -12,14 +12,13 @@ type AnimalData struct {
 }
 
 type Animal struct {
-    ID             int `json:"id"`
+    Population             int `json:"population"`
     Name           string `json:"name"`
     Species        string `json:"species"`
     Diet           string `json:"diet"`
     Habitat        string `json:"habitat"`
     Characteristics []string `json:"characteristics"`
 }
-
 
 type MaybeAnimalData struct {
     Success bool
@@ -69,4 +68,9 @@ func WriteDB(fileName string, data AnimalData) bool {
         defer file.Close()
     }
     return true;
+}
+
+
+func (body *Animal) Valid() bool {
+    return body.Population >= 0 && body.Name != "" && body.Species != "" && body.Diet != "" && body.Habitat != "";
 }

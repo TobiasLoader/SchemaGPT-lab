@@ -55,3 +55,12 @@ func SendResponse(res Response, w http.ResponseWriter, r *http.Request){
         w.Write(resData);
     }
 }
+
+func WriteDBRes(fileName string, data dbs.AnimalData) Response {
+    written := dbs.WriteDB("db.json",data);
+    if written {
+        return SuccessResponse();
+    } else {
+        return ErrorResponse("Failed to write to database.");
+    }
+}

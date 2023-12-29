@@ -1,0 +1,143 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Schema gpt lab",
+    "description": "Test for schema gpt lab.",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://schema-gpt.onrender.com"
+    }
+  ],
+  "paths": {
+    "/getDB": {
+      "get": {
+        "description": "Get the whole database",
+        "operationId": "GetDB",
+        "parameters": [],
+        "deprecated": false
+      }
+    },
+    "/getAnimal": {
+      "get": {
+        "description": "Gets information about an aniaml",
+        "operationId": "GetAnimal",
+        "parameters": [
+          {
+            "name": "animal",
+            "in": "query",
+            "description": "The name of the animal you want to get.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/postAuthor": {
+      "post": {
+        "description": "Updates the authors name",
+        "operationId": "PostAuthor",
+        "parameters": [
+          {
+            "name": "author",
+            "in": "body",
+            "description": "Name of the new author",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/postAnimalCharacteristic": {
+      "post": {
+        "description": "Adds a characteristic to a given animal",
+        "operationId": "PostAnimalCharacteristic",
+        "parameters": [
+          {
+            "name": "animal",
+            "in": "body",
+            "description": "Name of the animal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "characteristic",
+            "in": "body",
+            "description": "Characteristic to associate with the animal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/postNewAnimal": {
+      "post": {
+        "description": "Add a new Animal to the database",
+        "operationId": "PostNewAnimal",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "body",
+            "description": "Name of the animal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "population",
+            "in": "body",
+            "description": "Current worldwide population",
+            "required": true,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "habitat",
+            "in": "body",
+            "description": "Habitat of the animal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "species",
+            "in": "body",
+            "description": "Species of the animal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "diet",
+            "in": "body",
+            "description": "Diet of the animal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+        ],
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}

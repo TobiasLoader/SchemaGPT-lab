@@ -154,14 +154,40 @@ func postAnimalCharacteristicReq(body *PostAnimalCharacteristic, w http.Response
         if exists {
             animalData.Characteristics = append(animalData.Characteristics,body.Characteristic);
             db.Data[body.Animal] = animalData;
-            written := dbs.WriteDB("db.json",db);
-            if written {
-                return res.SuccessResponse();
-            } else {
-                return res.ErrorResponse("Characteristic not written to database.");
-            }
+            return res.WriteDBRes("db.json",db);
         } else {
             return res.ErrorResponse("Animal provided does not exist in database.");
+        }
+    }, res.DefaultFailure);
+    
+    res.SendResponse(obj, w, r);
+}
+
+// Post new animal
+
+func postNewAnimal(body []byte, w http.ResponseWriter, r *http.Request) {
+    bodyReq := req.UnmarshalBody(body, &dbs.Animal{});
+    if bodyReq.Success {
+        if typeCheckedPostBody, ok := bodyReq.Body.(*dbs.Animal); ok {
+            postNewAnimalReq(typeCheckedPostBody, w, r);
+        } else {
+            res.SendResponse(res.ErrorResponse("Incorrect type"), w, r);
+        }
+    } else {
+        res.SendResponse(res.ErrorResponse(bodyReq.Error), w, r);
+    }
+}
+
+func postNewAnimalReq(body *dbs.Animal, w http.ResponseWriter, r *http.Request) {
+    obj := db("db.json",func (db dbs.AnimalData) res.Response {
+        _, exists := db.Data[body.Name]
+        if exists {
+            return res.ErrorResponse("Animal '"+body.Name+"' already exists in the database.");
+        } else {
+            animalData := *body;
+            animalData.Characteristics = []string{};
+            db.Data[body.Name] = animalData;
+            return res.WriteDBRes("db.json",db);
         }
     }, res.DefaultFailure);
     
@@ -206,6 +232,7 @@ func main() {
     GET("/getAnimal", getAnimal);
     POST("/postAuthor", postAuthor);
     POST("/postAnimalCharacteristic", postAnimalCharacteristic);
+    POST("/postNewAnimal", postNewAnimal);
 
     deploy();
 }
