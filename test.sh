@@ -1,3 +1,9 @@
+
+# OPENAI SCHEMA
+curl "http://localhost:8080/schema"
+
+######
+
 # Get Database
 curl "http://localhost:8080/getDB"
 

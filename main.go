@@ -220,6 +220,20 @@ func deploy(){
     }
 }
 
+// OPEN AI SCHEMA
+
+func schema(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    data, err := ioutil.ReadFile("openai-schema.json")
+    if err != nil {
+        res.SendResponse(res.ErrorResponse(err.Error()),w,r);
+    } else {
+        w.Write(data)
+    }    
+}
+
+
 // main
 
 func main() {
@@ -233,6 +247,8 @@ func main() {
     POST("/postAuthor", postAuthor);
     POST("/postAnimalCharacteristic", postAnimalCharacteristic);
     POST("/postNewAnimal", postNewAnimal);
+
+    GET("/schema", schema);
 
     deploy();
 }
